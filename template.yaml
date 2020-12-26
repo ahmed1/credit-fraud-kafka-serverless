@@ -23,18 +23,166 @@ Parameters:
 
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  # S3 Bucket Resource
+  LoggingBucket:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
     Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: !Sub '${MainDataBucket}'
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+              - 'x-amz-*'
+              - 'Authorization'
+            AllowedMethods:
+              - GET
+              - POST
+              - PUT
+              - HEAD
+            AllowedOrigins:
+              - '*'
+            Id: Cognito-Authentication-CorsRule
+            MaxAge: 3000
+  # End Photo Store Resource
+
+  LoggingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: "LoggingBucket"
+      PolicyDocument:
+        Statement:
+          - Action:
+              - "s3:GetObject"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:s3:::"
+                  - Ref: "LoggingBucket"
+                  - "/*"
+            Principal: "*"
+          - Action:
+              - "s3:ListBucket"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:s3:::"
+                  - Ref: "LoggingBucket"
+                  - ""
+            Principal: "*"
+
+
+
+
+
+
+
+
+  ProducerT1T2Function:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Description: Lambda to produce events to T1 and T2
+    Properties:
+      FunctionName: Producer_t1_t2
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.7
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+      # Events:
+      #   HelloWorld:
+      #     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+      #     Properties:
+      #       Path: /hello
+      #       Method: get
+
+  ConsumerT1Function:
+    Type: AWS::Serverless::Function 
+    Description: Lambda to consume events from topic 1
+    Properties:
+      FunctionName: Consumer_t1
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+
+
+  ConsumerT2Function:
+    Type: AWS::Serverless::Function 
+    Description: Lambda to consume events from topic 2
+    Properties:
+      FunctionName: Consumer_t2
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+
+
+  ProducerT3Function:
+    Type: AWS::Serverless::Function 
+    Description: Lambda to produce events to t3
+    Properties:
+      FunctionName: Producer_t3
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+
+
+  ConsumerT3Function:
+    Type: AWS::Serverless::Function 
+    Description: Lambda to produce events to t3
+    Properties:
+      FunctionName: Consumer_t3
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+ 
+
+
+  LambaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: LambaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !Ref MainDataBucketArn
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource: !Join ["/", [!Ref MainDataBucketArn, "*"]]
+              - Effect: Allow
+                Action:
+                - cloudwatch:PutMetricData
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                - logs:CreateLogGroup
+                - logs:DescribeLogStreams
+                Resource: "*"
+
+
+
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
