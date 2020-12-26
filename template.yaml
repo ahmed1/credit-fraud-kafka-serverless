@@ -102,7 +102,7 @@ Resources:
       #     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
       #     Properties:
       #       Path: /hello
-      #       Method: get
+  #     #       Method: get
 
   ConsumerT1Function:
     Type: AWS::Serverless::Function 
@@ -155,7 +155,7 @@ Resources:
       Layers:
       - !Ref KafkaProcessingLayer
  
-   KafkaProcessingLib:
+  KafkaProcessingLib:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./src/layers/kafka-layer/
@@ -223,12 +223,12 @@ Resources:
 
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  # HelloWorldApi:
-  #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-  #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+#   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+#   # Find out more about other implicit resources you can reference within SAM
+#   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+#   # HelloWorldApi:
+#   #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+#   #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   ProducerT1T2Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ProducerT1T2Function.Arn
