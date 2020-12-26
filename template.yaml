@@ -10,6 +10,18 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  ApplicationName:
+    Type: String
+    Default: 'kafka-application'
+  MainDataBucket:
+    Type: String
+    Default: 'cc-final-project-part3-backend'
+  MainDataBucketArn:
+    Type: String
+    Default: 'arn:aws:s3:::cc-final-project-part3-backend'
+
+
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
