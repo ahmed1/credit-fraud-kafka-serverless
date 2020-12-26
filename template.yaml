@@ -95,6 +95,8 @@ Resources:
       Handler: producer_t1_t2.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
       # Events:
       #   HelloWorld:
       #     Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -111,6 +113,8 @@ Resources:
       Handler: consumer_t1.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
 
 
   ConsumerT2Function:
@@ -122,6 +126,8 @@ Resources:
       Handler: consumer_t2.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
 
 
   ProducerT3Function:
@@ -133,6 +139,8 @@ Resources:
       Handler: producer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
 
 
   ConsumerT3Function:
@@ -144,8 +152,28 @@ Resources:
       Handler: consumer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
  
+   KafkaProcessingLib:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/layers/kafka-layer/
+      Handler: app.lambda_handler
+      Runtime: python3.7
 
+
+
+  KafkaProcessingLayer:
+    Type: AWS::Serverless::LayerVersion
+    DependsOn: KafkaProcessingLib
+    Properties:
+      Description: Lambda layer for writing additional functions for indexing and searching images
+      LayerName: KafkaProcessingLib
+      ContentUri: ./.aws-sam/build/KafkaProcessingLib
+      CompatibleRuntimes: 
+        - python3.7
+      RetentionPolicy: Delete
 
   LambaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -238,5 +266,7 @@ Outputs:
     Description: "Implicit IAM Role created for Producer Function T1 T2"
     Value: !GetAtt ConsumerT3Role.Arn
 
-
+  KafkaProcessingLib:
+    Description: "Processing Layer"
+    Value: !GetAtt KafkaProcessingLib.Arn
 
