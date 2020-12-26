@@ -21,6 +21,21 @@ Parameters:
     Type: String
     Default: 'arn:aws:s3:::cc-final-project-part3-backend'
 
+  ReadCapacityUnits:
+    Description: Provisioned read throughput
+    Type: Number
+    Default: '5'
+    MinValue: '5'
+    MaxValue: '10000'
+    ConstraintDescription: must be between 5 and 10000
+  WriteCapacityUnits:
+    Description: Provisioned write throughput
+    Type: Number
+    Default: '10'
+    MinValue: '5'
+    MaxValue: '10000'
+    ConstraintDescription: must be between 5 and 10000
+
 
 Resources:
 
@@ -220,6 +235,21 @@ Resources:
                 Resource: "arn:aws:dynamodb:*"
 
 
+  testDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: uuid
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: uuid
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: !Ref 'ReadCapacityUnits'
+        WriteCapacityUnits: !Ref 'WriteCapacityUnits'
+      TableName: credit-card-purchases
+
+
 
 
 Outputs:
@@ -232,41 +262,51 @@ Outputs:
   ProducerT1T2Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ProducerT1T2Function.Arn
-  ProducerT1T2FunctionIamRole:
-    Description: "Implicit IAM Role created for Producer Function T1 T2"
-    Value: !GetAtt ProducerT1T2Role.Arn
+
+  # ProducerT1T2FunctionIamRole:
+  #   Description: "Implicit IAM Role created for Producer Function T1 T2"
+  #   Value: !GetAtt ProducerT1T2Role.Arn
+
 
   ConsumerT1Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ConsumerT1Function.Arn
-  ConsumerT1FunctionIamRole:
-    Description: "Implicit IAM Role created for Producer Function T1 T2"
-    Value: !GetAtt ConsumerT1Role.Arn
+
+  # ConsumerT1FunctionIamRole:
+  #   Description: "Implicit IAM Role created for Producer Function T1 T2"
+  #   Value: !GetAtt ConsumerT1Role.Arn
+    
 
   ConsumerT2Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ConsumerT2Function.Arn
-  ConsumerT2FunctionIamRole:
-    Description: "Implicit IAM Role created for Producer Function T1 T2"
-    Value: !GetAtt ConsumerT2Role.Arn
+
+  # ConsumerT2FunctionIamRole:
+  #   Description: "Implicit IAM Role created for Producer Function T1 T2"
+  #   Value: !GetAtt ConsumerT2Role.Arn
 
 
   ProducerT3Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ProducerT3Function.Arn
-  ProducerT3FunctionIamRole:
-    Description: "Implicit IAM Role created for Producer Function T1 T2"
-    Value: !GetAtt ProducerT3Role.Arn
+    
+  # ProducerT3FunctionIamRole:
+  #   Description: "Implicit IAM Role created for Producer Function T1 T2"
+  #   Value: !GetAtt ProducerT3Role.Arn
 
 
   ConsumerT3Function:
     Description: "Producer Function T1 T2"
     Value: !GetAtt ConsumerT3Function.Arn
-  ConsumerT3FunctionIamRole:
-    Description: "Implicit IAM Role created for Producer Function T1 T2"
-    Value: !GetAtt ConsumerT3Role.Arn
+  # ConsumerT3FunctionIamRole:
+  #   Description: "Implicit IAM Role created for Producer Function T1 T2"
+  #   Value: !GetAtt ConsumerT3Role.Arn
 
   KafkaProcessingLib:
     Description: "Processing Layer"
     Value: !GetAtt KafkaProcessingLib.Arn
+
+  TableName:
+    Value: !Ref 'testDynamoDBTable'
+    Description: Table name of the newly created DynamoDB table
 
