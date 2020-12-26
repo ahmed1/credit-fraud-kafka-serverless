@@ -91,8 +91,8 @@ Resources:
     Description: Lambda to produce events to T1 and T2
     Properties:
       FunctionName: Producer_t1_t2
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: producer-t1-t2/
+      Handler: producer_t1_t2.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
       # Events:
@@ -107,7 +107,7 @@ Resources:
     Description: Lambda to consume events from topic 1
     Properties:
       FunctionName: Consumer_t1
-      CodeUri: consumer_t1/
+      CodeUri: consumer-t1/
       Handler: consumer_t1.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
@@ -118,7 +118,7 @@ Resources:
     Description: Lambda to consume events from topic 2
     Properties:
       FunctionName: Consumer_t2
-      CodeUri: consumer_t2/
+      CodeUri: consumer-t2/
       Handler: consumer_t2.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
@@ -129,7 +129,7 @@ Resources:
     Description: Lambda to produce events to t3
     Properties:
       FunctionName: Producer_t3
-      CodeUri: producer_t3/
+      CodeUri: producer-t3/
       Handler: producer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
@@ -140,7 +140,7 @@ Resources:
     Description: Lambda to produce events to t3
     Properties:
       FunctionName: Consumer_t3
-      CodeUri: consumer_t3/
+      CodeUri: consumer-t3/
       Handler: consumer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
