@@ -107,8 +107,8 @@ Resources:
     Description: Lambda to consume events from topic 1
     Properties:
       FunctionName: Consumer_t1
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: consumer_t1/
+      Handler: consumer_t1.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
 
@@ -118,8 +118,8 @@ Resources:
     Description: Lambda to consume events from topic 2
     Properties:
       FunctionName: Consumer_t2
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: consumer_t2/
+      Handler: consumer_t2.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
 
@@ -129,8 +129,8 @@ Resources:
     Description: Lambda to produce events to t3
     Properties:
       FunctionName: Producer_t3
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: producer_t3/
+      Handler: producer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
 
@@ -140,8 +140,8 @@ Resources:
     Description: Lambda to produce events to t3
     Properties:
       FunctionName: Consumer_t3
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
+      CodeUri: consumer_t3/
+      Handler: consumer_t3.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
  
@@ -180,6 +180,16 @@ Resources:
                 - logs:CreateLogGroup
                 - logs:DescribeLogStreams
                 Resource: "*"
+              - Effect: Allow
+                Action:
+                - dynamodb:BatchGetItem
+                - dynamodb:GetItem
+                - dynamodb:Query
+                - dynamodb:Scan
+                - dynamodb:BatchWriteItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                Resource: "arn:aws:dynamodb:*"
 
 
 
@@ -188,12 +198,45 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  # HelloWorldApi:
+  #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+  #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  ProducerT1T2Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ProducerT1T2Function.Arn
+  ProducerT1T2FunctionIamRole:
+    Description: "Implicit IAM Role created for Producer Function T1 T2"
+    Value: !GetAtt ProducerT1T2Role.Arn
+
+  ConsumerT1Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ConsumerT1Function.Arn
+  ConsumerT1FunctionIamRole:
+    Description: "Implicit IAM Role created for Producer Function T1 T2"
+    Value: !GetAtt ConsumerT1Role.Arn
+
+  ConsumerT2Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ConsumerT2Function.Arn
+  ConsumerT2FunctionIamRole:
+    Description: "Implicit IAM Role created for Producer Function T1 T2"
+    Value: !GetAtt ConsumerT2Role.Arn
+
+
+  ProducerT3Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ProducerT3Function.Arn
+  ProducerT3FunctionIamRole:
+    Description: "Implicit IAM Role created for Producer Function T1 T2"
+    Value: !GetAtt ProducerT3Role.Arn
+
+
+  ConsumerT3Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ConsumerT3Function.Arn
+  ConsumerT3FunctionIamRole:
+    Description: "Implicit IAM Role created for Producer Function T1 T2"
+    Value: !GetAtt ConsumerT3Role.Arn
+
+
+
