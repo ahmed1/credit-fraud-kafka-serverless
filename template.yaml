@@ -131,8 +131,14 @@ Resources:
       Layers:
       - !Ref KafkaProcessingLayer
 
-
-
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
+      FunctionName: !Ref ConsumerT1Function
+      StartingPosition : LATEST
+      Topics:
+        - authorize_purchase
 
 
   ConsumerT2Function:
