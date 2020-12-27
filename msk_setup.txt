@@ -1,0 +1,26 @@
+### Setting up MSK
+
+
+
+After setup, we need to access it from EC2
+
+Start new EC2 linux instance with SSM Role
+
+```shell
+# add this in startup config so that it installs the ssm manager when created automatically
+#!bin/bash cd /tmp curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm yum install -y amazon-ssm-agent.rpm
+
+```
+
+* Can now access this ec2 instance from Systems Manager
+* Need to set up and install kafka to create brokers using the following commands
+
+```shell
+# install java
+sudo yum install java-1.8.0
+
+# install kafak
+# make sure to add sudo here again
+sudo wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
+```
+
