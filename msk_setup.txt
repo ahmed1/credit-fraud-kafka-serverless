@@ -28,9 +28,53 @@ sudo yum install java-1.8.0
 # install kafak
 # make sure to add sudo here again
 sudo wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
+
+# unzip file
+sudo tar -xzf kafka_2.12-2.2.1.tgz
+
+
+```
+
+* Note: in order to access MSK cluster from EC2 instance, need to provide ssm-role with full access to msk policy
+
+```shell
+# check that cluster is created from EC2
+ws kafka describe-cluster --region us-east-1 --cluster-arn "arn:aws:kafka:us-east-1:922059106485:cluster/kafka-cluster-0/cd28e17b-1597-4d49-ac87-d898e4bbeb05-11"
+```
+
+* To create a topic named `authorize purchase` 
+
+```shell
+bin/kafka-topics.sh --create --bootstrap-server b-2.kafka-cluster-0.rv7adk.c11.kafka.us-east-1.amazonaws.com:9092,b-1.kafka-cluster-0.rv7adk.c11.kafka.us-east-1.amazonaws.com:9094 --replication-factor 3 --partitions 2 --topic authorize_purchase
+
+# topic 2: record_purchase
 ```
 
 
+
+```shell
+# create vpc
+# vpc id: vpc-01eb3a5bcb36b2fe0
+# subnet route table: rtb-068f377ed62a38dc6
+# subnet 2 route table: rtb-03266743f286e7341
+# subnet 3 id: 
+
+
+
+# security group group id (from ec2 step): sg-06647ea4a7492b3b4
+
+# get status
+aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster2/acd5e638-465f-42b6-9f45-0e85c98e6214-11
+
+# zookeeper string
+bin/kafka-topics.sh --create --zookeeper z-2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 3 --partitions 1 --topic authorize_purchase
+
+bin/kafka-topics.sh --create --zookeeper z-2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 3 --partitions 1 --topic record_purchase
+
+
+
+
+```
 
 
 
