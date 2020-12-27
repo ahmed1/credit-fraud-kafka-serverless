@@ -4,20 +4,20 @@ import base64
 
 
 def lambda_handler(event, context):
-    print('event:', event)
-
-    message = message.encode('utf-8')
-    message = base64.decodebytes(message)
+    print('EVENTS:', event)
+    messages = [event['records'][key][0]['value'] for key in event['records'].keys()]
+    messages = [message.encode('utf-8') for message in messages]
+    messages = [base64.decodebytes(message) for message in messages]
+    messages = [eval(message) for message in messages] # json objects you can write to dynamodb
     
-    messages = [event['records'][x][0]['value'] for x in event['records'].keys()]
-    for message in messages:
-        print(message)
+    
+    print('processed messages:', messages)
     
 
     return {
         "statusCode": 200,
         "body": json.dumps({
-            "message": "Under Development",
+            "message": "Messages Received",
             
         }),
     }
