@@ -32,12 +32,19 @@ def lambda_handler(event, context):
     
     #put transaction in purchases database and update average in user db
     for message in messages:
+        
         save_transaction = purchases.put_item(Item=to_decimal(message))
         
         curr_user = user.get_item(Key={'uuid': message['uuid']})
-        curr_user['Item']['avgTransaction'] 
         
-        print(save_transaction)
+        #update average and count
+        message['count']  = curr_user['Item']['count'] + 1
+        message['avgTransaction'] = (curr_user['Item']['count'] * curr_user['Item']['avgTransaction']) / (message['count'])
+
+        #update user table
+        user.put_item(Key={'uuid': message['uuid'], 'avgTransaction': message['avgTransaction'], 'count': message['count']})
+        
+        
 
     return {
         "statusCode": 200,

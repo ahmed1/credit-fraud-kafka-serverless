@@ -3,9 +3,6 @@ from kafka import KafkaProducer
 import base64
 
 
-
-
-
 def lambda_handler(event, context):
     producer = KafkaProducer(security_protocol="SSL", bootstrap_servers = ['b-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:9094',\
                                                                             'b-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:9094'])
@@ -19,13 +16,13 @@ def lambda_handler(event, context):
     #check is_fraud
     
     if event['is_fraud']:
-        topic = "denied"
+        topic = "not_approved"
+        producer.send(topic, value=message_bytes)
         print("is Fraud")
-        #producer.send(topic, value=message_bytes)
 
     else:
         topic = "approved"
-        #producer.send(topic, value=message_bytes)
+        producer.send(topic, value=message_bytes)
         print("is NOT Fraud")
         
     
