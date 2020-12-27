@@ -70,7 +70,15 @@ aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-eas
 # zookeeper string
 bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic authorize_purchase
 
-bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:21811 --replication-factor 1 --partitions 1 --topic record_purchase
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic record_purchase
+
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic approved
+
+
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic not_approved
+
+
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic generate_reports
 
 
 

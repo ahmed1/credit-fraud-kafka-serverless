@@ -101,13 +101,13 @@ Resources:
 
 
 
-  ProducerT1T2Function:
+  ProducerT1Function: # authroize_purchase
     Type: AWS::Serverless::Function 
     Description: Lambda to produce events to T1 and T2
     Properties:
-      FunctionName: Producer_t1_t2
-      CodeUri: producer-t1-t2/
-      Handler: producer_t1_t2.lambda_handler
+      FunctionName: Producer_t1
+      CodeUri: producer-t1/
+      Handler: producer_t1.lambda_handler
       Runtime: python3.7
       Role: !GetAtt [ LambaExecutionRole, Arn ]
       Layers:
@@ -119,7 +119,7 @@ Resources:
       #       Path: /hello
   #     #       Method: get
 
-  ConsumerT1Function:
+  ConsumerT1Function: # authroize_purchase
     Type: AWS::Serverless::Function 
     Description: Lambda to consume events from topic 1
     Properties:
@@ -141,7 +141,19 @@ Resources:
         - authorize_purchase
 
 
-  ConsumerT2Function:
+  ProducerT2T3Function: # approved and not_approved
+    Type: AWS::Serverless::Function 
+    Description: Lambda to produce events to t3
+    Properties:
+      FunctionName: Producer_t2_t3
+      CodeUri: producer-t2-t3/
+      Handler: producer_t2_t3.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
+
+  ConsumerT2Function: # approved
     Type: AWS::Serverless::Function 
     Description: Lambda to consume events from topic 2
     Properties:
@@ -161,23 +173,10 @@ Resources:
       FunctionName: !Ref ConsumerT2Function
       StartingPosition : LATEST
       Topics:
-        - record_purchase
+        - approved
 
 
-  ProducerT3Function:
-    Type: AWS::Serverless::Function 
-    Description: Lambda to produce events to t3
-    Properties:
-      FunctionName: Producer_t3
-      CodeUri: producer-t3/
-      Handler: producer_t3.lambda_handler
-      Runtime: python3.7
-      Role: !GetAtt [ LambaExecutionRole, Arn ]
-      Layers:
-      - !Ref KafkaProcessingLayer
-
-
-  ConsumerT3Function:
+  ConsumerT3Function: # not_approved
     Type: AWS::Serverless::Function 
     Description: Lambda to produce events to t3
     Properties:
@@ -188,6 +187,51 @@ Resources:
       Role: !GetAtt [ LambaExecutionRole, Arn ]
       Layers:
       - !Ref KafkaProcessingLayer
+
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
+      FunctionName: !Ref ConsumerT3Function
+      StartingPosition : LATEST
+      Topics:
+        - not_approved
+
+
+  ProducerT4Function: #generate_reports
+    Type: AWS::Serverless::Function 
+    Description: Lambda to produce events to T1 and T2
+    Properties:
+      FunctionName: Producer_t4
+      CodeUri: producer-t4/
+      Handler: producer_t4.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
+
+
+  ConsumerT4Function: # generate_reports
+    Type: AWS::Serverless::Function 
+    Description: Lambda to produce events to t3
+    Properties:
+      FunctionName: Consumer_t4
+      CodeUri: consumer-t4/
+      Handler: consumer_t4.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt [ LambaExecutionRole, Arn ]
+      Layers:
+      - !Ref KafkaProcessingLayer
+
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
+      FunctionName: !Ref ConsumerT4Function
+      StartingPosition : LATEST
+      Topics:
+        - generate_reports
+
  
   KafkaProcessingLib:
     Type: AWS::Serverless::Function
@@ -195,6 +239,9 @@ Resources:
       CodeUri: ./src/layers/kafka-layer/
       Handler: app.lambda_handler
       Runtime: python3.7
+
+
+
 
 
 
@@ -278,9 +325,9 @@ Outputs:
 #   # HelloWorldApi:
 #   #   Description: "API Gateway endpoint URL for Prod stage for Hello World function"
 #   #   Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  ProducerT1T2Function:
+  ProducerT1Function:
     Description: "Producer Function T1 T2"
-    Value: !GetAtt ProducerT1T2Function.Arn
+    Value: !GetAtt ProducerT1Function.Arn
 
   # ProducerT1T2FunctionIamRole:
   #   Description: "Implicit IAM Role created for Producer Function T1 T2"
@@ -295,6 +342,11 @@ Outputs:
   #   Description: "Implicit IAM Role created for Producer Function T1 T2"
   #   Value: !GetAtt ConsumerT1Role.Arn
     
+  ProducerT2T3Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ProducerT2T3Function.Arn
+
+
 
   ConsumerT2Function:
     Description: "Producer Function T1 T2"
@@ -305,9 +357,7 @@ Outputs:
   #   Value: !GetAtt ConsumerT2Role.Arn
 
 
-  ProducerT3Function:
-    Description: "Producer Function T1 T2"
-    Value: !GetAtt ProducerT3Function.Arn
+
     
   # ProducerT3FunctionIamRole:
   #   Description: "Implicit IAM Role created for Producer Function T1 T2"
@@ -320,6 +370,18 @@ Outputs:
   # ConsumerT3FunctionIamRole:
   #   Description: "Implicit IAM Role created for Producer Function T1 T2"
   #   Value: !GetAtt ConsumerT3Role.Arn
+
+  ProducerT4Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ProducerT4Function.Arn
+
+
+
+  ConsumerT4Function:
+    Description: "Producer Function T1 T2"
+    Value: !GetAtt ConsumerT4Function.Arn
+
+
 
   KafkaProcessingLib:
     Description: "Processing Layer"
