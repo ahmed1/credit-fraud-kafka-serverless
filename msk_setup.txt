@@ -20,6 +20,7 @@ Start new EC2 linux instance with SSM Role (in the same VPC and subnet as MSK cl
 
 * Can now access this ec2 instance from Systems Manager
 * Need to set up and install kafka to create brokers using the following commands
+* Note: will need to set up ec2 instance in same vpc as MSK and need to set up with your credentials using `aws configure`
 
 ```shell
 # install java
