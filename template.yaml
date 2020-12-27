@@ -131,7 +131,7 @@ Resources:
       Layers:
       - !Ref KafkaProcessingLayer
 
-  EventSourceMapping:
+  EventSourceMapping1:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
@@ -166,7 +166,7 @@ Resources:
       - !Ref KafkaProcessingLayer
 
 
-  EventSourceMapping:
+  EventSourceMapping2:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
@@ -188,7 +188,7 @@ Resources:
       Layers:
       - !Ref KafkaProcessingLayer
 
-  EventSourceMapping:
+  EventSourceMapping3:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
@@ -227,7 +227,7 @@ Resources:
       Layers:
       - !Ref KafkaProcessingLayer
 
-  EventSourceMapping:
+  EventSourceMapping4:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
       EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
