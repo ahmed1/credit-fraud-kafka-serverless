@@ -1,10 +1,16 @@
+### Creating MSK Cluster
+
+* followed some steps we can document here later
+
+
+
 ### Setting up MSK
 
 
 
 After setup, we need to access it from EC2
 
-Start new EC2 linux instance with SSM Role
+Start new EC2 linux instance with SSM Role (in the same VPC and subnet as MSK cluster)
 
 ```shell
 # add this in startup config so that it installs the ssm manager when created automatically
@@ -24,3 +30,14 @@ sudo yum install java-1.8.0
 sudo wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
 ```
 
+
+
+
+
+
+
+
+
+### Lambda
+
+* Needs EC2 Full Access policy to put inside VPC
