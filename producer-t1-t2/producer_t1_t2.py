@@ -16,20 +16,26 @@ def lambda_handler(event, context):
 
     print(producer.bootstrap_connected()) # make sure can establish connection with kafka
     
-    topic = event['resource'][1:]
+    topic = str(event['resource'][1:]).replace('-', '_')
+    print(topic)
     message = json.loads(event['body'])['body']
     print('MESSAGE:', message)
+    message = str(message)
     message_bytes = message.encode('utf-8')
     #base64_bytes = base64.b64encode(message_bytes)
+    
     
     response = producer.send(topic=topic, value = message_bytes)
     
     print('response', response)
-    
+    if topic == 'authorize_purchase':
+        msg = 'Received Validation Request'
+    else:
+        msg = 'Received Purchase Record'
     
     return {
         "statusCode": 200,
         "body": json.dumps({
-            "message": "under dev",
+            "message": msg,
         }),
     }
