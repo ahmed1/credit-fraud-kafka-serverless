@@ -209,7 +209,11 @@ Resources:
       Role: !GetAtt [ LambaExecutionRole, Arn ]
       Layers:
       - !Ref KafkaProcessingLayer
-
+      Events:
+        Schedule1:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
 
   ConsumerT4Function: # generate_reports
     Type: AWS::Serverless::Function 
