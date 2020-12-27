@@ -8,3 +8,4 @@
 
 * Note: Topic 3 Producer will run at time intervals to produce aggregate reports for each person
 
+* Note: for each lambda, need to write exact MSK trigger as IAC
