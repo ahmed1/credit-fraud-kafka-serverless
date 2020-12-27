@@ -1,0 +1,26 @@
+{
+    "BrokerNodeGroupInfo": {
+      "BrokerAZDistribution": "DEFAULT",
+      "InstanceType": "kafka.m5.large",
+      "ClientSubnets": [
+        "subnet-06c982f53642178c4",
+        "subnet-0c311ef7c5ea5c7da"
+      ],
+      "SecurityGroups": [
+        "sg-0fcc810fb80892502"
+      ]
+    },
+    "ClusterName": "KafkaCluster4",
+    "EncryptionInfo": {
+      "EncryptionAtRest": {
+        "DataVolumeKMSKeyId": "8bf831a4-8555-4797-8f5a-5a192a71a244"
+      },
+      "EncryptionInTransit": {
+        "InCluster": true,
+        "ClientBroker": "TLS"
+      }
+    },
+    "EnhancedMonitoring": "PER_TOPIC_PER_BROKER",
+    "KafkaVersion": "2.2.1",
+    "NumberOfBrokerNodes": 2
+  }

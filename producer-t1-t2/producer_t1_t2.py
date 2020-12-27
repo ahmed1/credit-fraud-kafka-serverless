@@ -1,42 +1,32 @@
 import json
-
+from kafka import KafkaProducer
+#from kafka import KafkaClient
 # import requests
+import base64
 
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+   
+   
+    producer = KafkaProducer(security_protocol="SSL", bootstrap_servers = ['b-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:9094',\
+                                                                            'b-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:9094'])
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
-
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
-
-    context: object, required
-        Lambda Context runtime methods and attributes
-
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
+    print(producer.bootstrap_connected())
+    
+    message = event
+    print(message)
+    message = str(message)
+    message_bytes = message.encode('utf-8')
+    #base64_bytes = base64.b64encode(message_bytes)
+    
+    response = producer.send(topic='authorize_purchase', value = message_bytes)
+    
+    print('response', response)
+    
+    
     return {
         "statusCode": 200,
         "body": json.dumps({
-            "message": "hello world",
-            # "location": ip.text.replace("\n", "")
+            "message": "under dev",
         }),
     }

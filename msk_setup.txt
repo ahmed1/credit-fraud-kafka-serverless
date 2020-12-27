@@ -58,25 +58,42 @@ bin/kafka-topics.sh --create --bootstrap-server b-2.kafka-cluster-0.rv7adk.c11.k
 # subnet route table: rtb-068f377ed62a38dc6
 # subnet 2 route table: rtb-03266743f286e7341
 # subnet 3 id: 
-
+aws kafka create-cluster --cli-input-json file://clusterinfo.json
 
 
 # security group group id (from ec2 step): sg-06647ea4a7492b3b4
 
 # get status
-aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster2/acd5e638-465f-42b6-9f45-0e85c98e6214-11
+aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
 
 # zookeeper string
-bin/kafka-topics.sh --create --zookeeper z-2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 3 --partitions 1 --topic authorize_purchase
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 1 --partitions 1 --topic authorize_purchase
 
-bin/kafka-topics.sh --create --zookeeper z-2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181,z-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:2181 --replication-factor 3 --partitions 1 --topic record_purchase
+bin/kafka-topics.sh --create --zookeeper z-1.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-3.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:2181,z-2.kafkacluster4.quil2t.c11.kafka.us-east-1.amazonaws.com:21811 --replication-factor 1 --partitions 1 --topic record_purchase
 
 
 
 
 ```
 
+#### Setting up lambda
 
+* Note: Need to make sure Lambda is in same vpc as Kafka Cluster
+* Lambda Requires `AmazonEC2FullAccess`, `AmazonMSKFullAccess`, and `AWSLambdaMSKExecutionRole`
+* Producer Lambda has to be in the same VPC but can be in a public subnet
+* Consumer Lambda does NOT have to be in same vpc as MSK
+
+```python
+# kafka-python documentation
+# https://kafka-python.readthedocs.io/en/master/apidoc/KafkaProducer.html
+
+# set up producer
+producer = KafkaProducer(security_protocol="SSL", bootstrap_servers = ['b2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094',                                      'b-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094',                                                                            'b-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094'])
+
+# test producer
+./kafka-console-producer.sh --broker-list b-1.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094,b-2.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094,b-3.kafkacluster2.8jeqpb.c11.kafka.us-east-1.amazonaws.com:9094 --producer.config client.properties --topic AWSKafkaTutorialTopic
+
+```
 
 
 
