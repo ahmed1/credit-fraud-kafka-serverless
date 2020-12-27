@@ -132,6 +132,9 @@ Resources:
       - !Ref KafkaProcessingLayer
 
 
+
+
+
   ConsumerT2Function:
     Type: AWS::Serverless::Function 
     Description: Lambda to consume events from topic 2
@@ -143,6 +146,16 @@ Resources:
       Role: !GetAtt [ LambaExecutionRole, Arn ]
       Layers:
       - !Ref KafkaProcessingLayer
+
+
+  EventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11
+      FunctionName: !Ref ConsumerT2Function
+      StartingPosition : LATEST
+      Topics:
+        - record_purchase
 
 
   ProducerT3Function:
