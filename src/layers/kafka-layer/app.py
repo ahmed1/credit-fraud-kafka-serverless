@@ -1,4 +1,15 @@
-# import json
+import json
+
+def to_decimal(message):
+    message['amt'] = Decimal(str(float(message['amt'])))
+    message['lat'] = Decimal(str(float(message['lat'])))
+    message['long'] = Decimal(str(float(message['long'])))
+    message['merch_lat'] = Decimal(str(float(message['merch_lat'])))
+    message['merch_long'] = Decimal(str(float(message['merch_long'])))
+    
+    return message 
+
+
 
 categories_vector = ['category_entertainment','category_food_dining','category_gas_transport','category_grocery_net','category_grocery_pos','category_health_fitness', 'category_home',	'category_kids_pets','category_misc_net','category_misc_pos','category_personal_care','category_shopping_net','category_shopping_pos','category_travel']
 category_stats = {'min': {'entertainment': -0.4325895030466854,

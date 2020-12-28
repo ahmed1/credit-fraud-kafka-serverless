@@ -4,20 +4,17 @@ import boto3
 from decimal import Decimal
 
 # import requests
+import sys
+sys.path.append("/opt")
+
+import app
 
 dynamo = boto3.resource('dynamodb')
 daily_purchases = dynamo.Table('daily_logs') #daily billing
 purchases = dynamo.Table('test-purchases') #user billing
 user = dynamo.Table('credit-card-purchases') #avgs
 
-def to_decimal(message):
-    message['amt'] = Decimal(str(float(message['amt'])))
-    message['lat'] = Decimal(str(float(message['lat'])))
-    message['long'] = Decimal(str(float(message['long'])))
-    message['merch_lat'] = Decimal(str(float(message['merch_lat'])))
-    message['merch_long'] = Decimal(str(float(message['merch_long'])))
-    
-    return message 
+
 
 
 def lambda_handler(event, context):
@@ -36,7 +33,7 @@ def lambda_handler(event, context):
     message['date'] = message['trans_date_trans_time'].split(" ")[0]
     
     #log transaction
-    save_transaction = purchases.put_item(Item=to_decimal(message))
+    save_transaction = purchases.put_item(Item=app.to_decimal(message))
 
     #check if day exists in date daily_purchases
     try:
