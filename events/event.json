@@ -1,62 +1,8 @@
-{
-  "body": "{\"message\": \"hello world\"}",
-  "resource": "/{proxy+}",
-  "path": "/path/to/resource",
-  "httpMethod": "POST",
-  "isBase64Encoded": false,
-  "queryStringParameters": {
-    "foo": "bar"
-  },
-  "pathParameters": {
-    "proxy": "/path/to/resource"
-  },
-  "stageVariables": {
-    "baz": "qux"
-  },
-  "headers": {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Encoding": "gzip, deflate, sdch",
-    "Accept-Language": "en-US,en;q=0.8",
-    "Cache-Control": "max-age=0",
-    "CloudFront-Forwarded-Proto": "https",
-    "CloudFront-Is-Desktop-Viewer": "true",
-    "CloudFront-Is-Mobile-Viewer": "false",
-    "CloudFront-Is-SmartTV-Viewer": "false",
-    "CloudFront-Is-Tablet-Viewer": "false",
-    "CloudFront-Viewer-Country": "US",
-    "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
-    "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Custom User Agent String",
-    "Via": "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)",
-    "X-Amz-Cf-Id": "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA==",
-    "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
-    "X-Forwarded-Port": "443",
-    "X-Forwarded-Proto": "https"
-  },
-  "requestContext": {
-    "accountId": "123456789012",
-    "resourceId": "123456",
-    "stage": "prod",
-    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
-    "requestTime": "09/Apr/2015:12:34:56 +0000",
-    "requestTimeEpoch": 1428582896000,
-    "identity": {
-      "cognitoIdentityPoolId": null,
-      "accountId": null,
-      "cognitoIdentityId": null,
-      "caller": null,
-      "accessKey": null,
-      "sourceIp": "127.0.0.1",
-      "cognitoAuthenticationType": null,
-      "cognitoAuthenticationProvider": null,
-      "userArn": null,
-      "userAgent": "Custom User Agent String",
-      "user": null
-    },
-    "path": "/prod/path/to/resource",
-    "resourcePath": "/{proxy+}",
-    "httpMethod": "POST",
-    "apiId": "1234567890",
-    "protocol": "HTTP/1.1"
-  }
-}
+{"eventSource": "aws:kafka", 
+  "eventSourceArn": "arn:aws:kafka:us-east-1:922059106485:cluster/KafkaCluster4/bf9e38a0-436f-47bd-9896-c386b922397c-11", 
+  "records": {
+    "generate_reports-0": [
+      {
+        "topic": "generate_reports", "partition": 0, "offset": 50, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MDE1N2ViNTktMDk2Yy00NTBiLTg1YjctYjdiNDRmODBjNWQ0LDAyOTYwYzI1LTZkMDctNGNhMS1hMGRiLTkxMmI1MWJjYTEwYg=="
+      }, 
+        {"topic": "generate_reports", "partition": 0, "offset": 51, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MDM5ZGVkN2YtOTZhZC00ZTE1LTgwMzUtNWY4NDMzODkxMDYzLDAzZWZlMTZmLWNkODAtNDQzOS04M2M0LTc5MjVhYjIzZWMzZQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 52, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MDYyNzlmMTktMzUzYy00YWNhLTgwNDItNjQ2YjhmOTRkYjQwLDA4ZTFiZTQ2LWFhMWUtNGQwNC1hMjE0LTk2ZDg1ZTgxMTQ3Yw=="}, {"topic": "generate_reports", "partition": 0, "offset": 53, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MGM4MGU2ZjMtNDIxZC00NzNiLWE5N2MtN2IyNDM3ODA3ZTNjLDBmYzliN2NmLTU3YmUtNDUxMi04MjNhLTA5YWFkOTM1YjRkZA=="}, {"topic": "generate_reports", "partition": 0, "offset": 54, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MTA1MDJjNjQtMDVjNS00ZDUxLWJhNzctNWE0ZjNjZTJmNzU0LDExYjI4Yjg1LTBlNzctNGIxYS05YmFhLTkyODIzNDkyOWZjNg=="}, {"topic": "generate_reports", "partition": 0, "offset": 55, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MTkxOWZkNGItMjA3MC00NzcwLWI1ODUtMjYyMjE3YjMxYTAyLDE5OTYzZTdiLWUyN2ItNGRmZi04MDk1LWU4YmM3NWJhNTcwYQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 56, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MWM3MWMwNzItMjAxMy00ZTA1LWE5ZTctZjFkNWJlMzAzYjMxLDIwMWI4YzMwLTAwYWMtNDI4MS05MWY5LTdhYTQ1MDdjNjI1OA=="}, {"topic": "generate_reports", "partition": 0, "offset": 57, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MjBkMmNmNzgtY2Q5NS00Y2RmLThhNGItNDZmNzQ3Mzc1YmJmLDIzZmU5MjYzLTFhMDctNDU2Yy05MjJlLTFiMjhhZWNmMTdhZg=="}, {"topic": "generate_reports", "partition": 0, "offset": 58, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MjhjOTZkNTgtMDJlZC00ZjliLTkwMmItNTEzODQ4MDRiMDAzLDI5MGM3MzU2LTEwYTYtNDRhZC1iMzc2LTJiNWJlMWZjZDRjZg=="}, {"topic": "generate_reports", "partition": 0, "offset": 59, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MmY2OTdiNjUtMDI1Yy00NmIxLWFhMGQtZjQwOWY1OTdhMjVjLDJmZDZhNWQ1LWE5MGEtNDgzMi1iNmVhLTdiMmM0MDAyMjNiOA=="}, {"topic": "generate_reports", "partition": 0, "offset": 60, "timestamp": 1609152843796, "timestampType": "CREATE_TIME", "value": "MzBmYTNhMDQtZmQ3Ni00ZmUzLWFlZWEtZjViMWI5M2VhN2JiLDMxOGE1NWE3LTZjMWQtNDE0OC1hOWE5LWExZWI2ZmQ2YWIyNA=="}, {"topic": "generate_reports", "partition": 0, "offset": 61, "timestamp": 1609152843835, "timestampType": "CREATE_TIME", "value": "MzYwZWRjYjEtNjA4NS00Nzc1LTgyNGEtOGFmZmQ5MjMzNjdlLDM3MDczOGExLTdmMDMtNDA1Mi05NTI5LTk4Zjk3ZDllMDBiYw=="}, {"topic": "generate_reports", "partition": 0, "offset": 62, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "MzdiZTk5YWQtZmFjMi00NmNmLTg4NjQtYzQ0NzQ3YmQ2YjEzLDM5NjA0NzA1LWJmZmMtNDkyNi04ODI0LTlkMmYxYmJjM2IxNA=="}, {"topic": "generate_reports", "partition": 0, "offset": 63, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "M2JkZmYzZDktMWI2MS00MWE1LWFjMjItNTI1ZWQ2MTJkNmI1LDQxYmM1NjA2LTBiMTUtNDMwMi1iOTY3LTgzNTNlNTUxMjYxZg=="}, {"topic": "generate_reports", "partition": 0, "offset": 64, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NDdmOThjY2YtNWM3OC00ZTlmLWI5ZDgtNjVlZjU5NTMyYWQ1LDQ5YjAwMjBlLTc4NDItNGVkOS1hYTYwLTA3M2YzZjQ4NjRhMg=="}, {"topic": "generate_reports", "partition": 0, "offset": 65, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NGMwM2FkMmYtYTA5YS00Y2JiLWFmMTMtNTk5NWYwNDRlNzlmLDRjMWNlMjQ5LTAyNjctNDBjZS1iMDNhLWU1NzI5N2IwZjI5Zg=="}, {"topic": "generate_reports", "partition": 0, "offset": 66, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NGUxNWZmNWYtNzA2OS00ZDIwLWE0NTQtMTY3NTNmNmViM2U4LDUwMWI5MjRjLTA0NjAtNDY3Yi1iY2FjLWJiYTQzY2QxM2M3MA=="}, {"topic": "generate_reports", "partition": 0, "offset": 67, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NTg5M2RjYjQtMzUyZS00ZTJjLThjZDAtOTAyNWY4MGUzZjg5LDU4YzExNTVlLWRmYTAtNGViZC1hNmM5LWU5MWY3OWQ1YmEwMg=="}, {"topic": "generate_reports", "partition": 0, "offset": 68, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NTlhMTM2ZmQtNDljOC00ZjM0LThlZTctNGZkZTJhYTAwYjIwLDU5YTFiZjU5LTJmNjgtNGRiYS1hYWMxLWJhY2M0N2U4MWQ1Yw=="}, {"topic": "generate_reports", "partition": 0, "offset": 69, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NWIxMjJhOGQtYmVmYy00NTYxLTk3MDgtOGY5ZjMzMDM3NjYzLDViNWMzMzExLTQ3OTQtNDQwYi1hOGJkLTIxMTBkNWY2ZjE2NA=="}, {"topic": "generate_reports", "partition": 0, "offset": 70, "timestamp": 1609152843836, "timestampType": "CREATE_TIME", "value": "NWM5MzVlMTEtNWQ1YS00NmQ4LThhNWYtNjQxNTIzZjU2OTMwLDVlNzgwNWVkLTgzOTQtNGQxZS1hNGRiLThkMmEzMGJlOTBlOQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 71, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "NjIxNmJlOTQtOWM0OS00YzQ5LWE4MGMtOWVjNmQzNWRlMjE4LDYyM2I2YjU5LTk1YWUtNGVhZi05MjM5LTE2YWUwMzQxNDhhZA=="}, {"topic": "generate_reports", "partition": 0, "offset": 72, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "NjcwNzI5MTEtMjY3OS00YmVmLTk4MTAtNzRiYzYzZTIwOTk3LDY5ZTQ4YjQ5LTYzYTctNGFlMi1iNTZjLTU3NGU0NzNiNmVjYQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 73, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "NmU5N2M2ZDItNGVmZS00ZTcxLWE0NmYtZDAwMjBlZjRkMjBjLDcyMTY0ZTdmLTkyMWMtNDA1MS1iZGJlLTA3MDRjNDRiYmU3Mg=="}, {"topic": "generate_reports", "partition": 0, "offset": 74, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "N2I5NGVkMzItYzA5Mi00YTUxLWIyOGMtNzIzMDBhZDA3NGRmLDdlYjU4YmQ4LWU5OTAtNDZhZC04MjBkLTM3ZmI0MzhjZjA3NA=="}, {"topic": "generate_reports", "partition": 0, "offset": 75, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "ODU4YmNhYmQtZjRhYS00Y2VlLThkODAtODU5OGE2NzNhM2QxLDhjN2E5NzU0LWRjNTktNDZjMS04MmU3LWI3YTM1OGE1YTNiNw=="}, {"topic": "generate_reports", "partition": 0, "offset": 76, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "OTFjZDNiNjMtMDFiMi00MjA0LThmY2UtMDc5MzgwY2YwNTFmLDkyOGRiYzUyLTBkZDAtNGYwNC1iOGVkLTE5NWZhNDdlMzdjMA=="}, {"topic": "generate_reports", "partition": 0, "offset": 77, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "OTQ5ZjU1ODEtNjNkMS00NDE2LTgyMzctMjI0M2U5ZDc5YmVkLDk2N2I1OGZhLTQyOTAtNGI3Yi05MThiLTFjMzhiNjBmNDI2ZA=="}, {"topic": "generate_reports", "partition": 0, "offset": 78, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "OTg5NTRmOTUtYzBmZi00NWRlLWFlNzctMzQ2N2JjNWI5YWM1LDk5MDJmNmNlLTZkNjAtNGIxMC1iOGM4LTQ1NjA5YWZkOTg3Ng=="}, {"topic": "generate_reports", "partition": 0, "offset": 79, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "OWJjODZkZWYtMWU1OC00NjFjLWE1M2QtNjFjMmQzZWU0M2U0LDljYmRmOGU0LWY3YTktNDE5YS05Y2U1LWE2NjZjNjgzYjhkNw=="}, {"topic": "generate_reports", "partition": 0, "offset": 80, "timestamp": 1609152843956, "timestampType": "CREATE_TIME", "value": "YTIwODcyYTgtMWJhZC00ZDFjLWFjYmQtM2ExNzRjNjk5YmM4LGE0N2FjMWM2LWQyMjQtNGYwZC05YjU0LTRlYTMxZWJjOTFiOQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 81, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YTRlZTVmOTctOTdjZi00ZGVlLTgzYTktODlmNGVmOTk5ZGNkLGE1ZGNmNTA3LTc2MTItNGIwZS1iNDgxLWYyOGYyN2QxMjJkOA=="}, {"topic": "generate_reports", "partition": 0, "offset": 82, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YWE2MWY5ZTUtMmE0OC00ZmU2LThhNWItNDQ2MjU5YjM3YmE3LGFhNjhiZGVjLTJmMWItNDA0My1hOGE3LTcwZTA5NzliNjQzNg=="}, {"topic": "generate_reports", "partition": 0, "offset": 83, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YWQwMmI1NWUtZmE3YS00MGViLTkxNWYtNGI2ZWQ0ZmM1MjU2LGIwOGJjY2MyLWU0YTEtNDU0My1hOTZiLTdjYWU2ZGEzNWRhOQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 84, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YjNkODRmZTMtZDU1NC00N2E4LWI1NmEtN2Y5MTVhNTEwODQyLGI0MjIxODU5LTU1OTctNDQzZC1hOGIxLTc1ZGMzNDQzNGY3Yw=="}, {"topic": "generate_reports", "partition": 0, "offset": 85, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YjdmN2FhYWEtMDlkMi00MzA0LTk0MDItMmE2ODQ4MDBlOTc0LGI4Y2UyMDY3LWYzOGItNGE0ZS1hNjRjLWI4N2FkMzBiNmMzMg=="}, {"topic": "generate_reports", "partition": 0, "offset": 86, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YmI4ZDc1MjctZDRhOC00NjRiLWI5ZjgtYWNiNzc5NzBmMjBkLGJiZWJkOTczLTdmMGMtNDM4Yi05YjgxLTA0OTFlN2RjZDNmNQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 87, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YzRlMmNhNzctZDhiZC00Y2UyLTk2ZGQtYjgyYWEzOGJhZDExLGM3MzYwOTc4LTU4NzktNGQ4OC1iYjYwLWFhYzdmNGI0NzA5MA=="}, {"topic": "generate_reports", "partition": 0, "offset": 88, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "YzgzNGJlYzMtMzFjZS00ZTUyLTg1MTMtODQ2NTM4MjViMmE2LGNkZWI0YThlLTJjYzgtNDQ5ZS05NTgzLWY0ZjMzZjdmYTMyMw=="}, {"topic": "generate_reports", "partition": 0, "offset": 89, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "ZDI4Y2I1Y2UtYTNiZS00NjhhLWIzY2QtYjFiNzljMDRhMWQ2LGQzMzZkNjczLTJkODEtNDg5My1iYzkzLTNlODhlOWE0YTM4ZQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 90, "timestamp": 1609152844015, "timestampType": "CREATE_TIME", "value": "ZDg0Y2QzNzYtNDc2Ny00NWNlLWI3YjktYmEzNzljNDI2MGE4LGRhMDY4YWU5LTJiZTMtNDA4Ni05OTIwLTliZWQzNzljMDUxNw=="}, {"topic": "generate_reports", "partition": 0, "offset": 91, "timestamp": 1609152844035, "timestampType": "CREATE_TIME", "value": "ZGI5Y2IxNzMtNzdmZC00YzA0LThkM2EtYzZlZGZjNjQzOTA2LGRjOGRhODYxLTUyODAtNGNmMi05MWY4LTg0MGFkNDEyMjFjYw=="}, {"topic": "generate_reports", "partition": 0, "offset": 92, "timestamp": 1609152844035, "timestampType": "CREATE_TIME", "value": "ZTEzNzlmN2UtNGIyZS00NDNkLTgxOGQtZjEyOGY0ZWY4YTdjLGUyYjZjNmM2LWY0NWQtNGE0OS04NGRhLTNmZjA3NzA3ZjhkMA=="}, {"topic": "generate_reports", "partition": 0, "offset": 93, "timestamp": 1609152844035, "timestampType": "CREATE_TIME", "value": "ZTRmY2Q5NWQtNjBhZi00NDE2LTk1MWUtMDI5MzY3NTRjYTYzLGU1ZDBjNGVmLTNkMTEtNDA2NC1iZjg4LTk5N2JjZGRmOWZjMA=="}, {"topic": "generate_reports", "partition": 0, "offset": 94, "timestamp": 1609152844035, "timestampType": "CREATE_TIME", "value": "ZTdkMzg1NmEtNmMyOC00Mzk2LTk2YWEtOTVhZGJhMTAyNDA5LGViNWU3YmU5LTk2N2MtNDIwMy1hMGIxLWM1Mzg0MDlmNWQwYg=="}, {"topic": "generate_reports", "partition": 0, "offset": 95, "timestamp": 1609152844036, "timestampType": "CREATE_TIME", "value": "ZWUxN2U0MDctODliOC00Mzk4LWE0NWEtMTNiYjA0N2M2MDViLGYyNDk2YzkwLTViYTMtNGY2MC1hZTM1LWM5NDJkZmQyMzBjYg=="}, {"topic": "generate_reports", "partition": 0, "offset": 96, "timestamp": 1609152844036, "timestampType": "CREATE_TIME", "value": "ZjNmNGI0ZmQtM2UxZC00YmUwLThlMzQtNjNkOGUyYjQ5ZDBkLGY1OWZhMDI5LWY3NTQtNDBhMS04NzY3LWZmOWE0MmNmNmFkZQ=="}, {"topic": "generate_reports", "partition": 0, "offset": 97, "timestamp": 1609152844036, "timestampType": "CREATE_TIME", "value": "ZjYxNTY0YmItNWQxNC00NDIyLThhNGMtNzNhZGU2ODIzNGNjLGY5MmVjZWI0LWMwYzctNGYyZC05YTkxLTFlZTkyOTQ0MjgzYw=="}, {"topic": "generate_reports", "partition": 0, "offset": 98, "timestamp": 1609152844036, "timestampType": "CREATE_TIME", "value": "ZjlmODk5YzEtYjBkNS00NmUwLWEyMWYtODc3ZTlkMTA5OWJjLGZlMjI3NmRmLWQ0MWUtNDEyZS1iOGU1LTQ5ZmNhNzFkMzJlZg=="}, {"topic": "generate_reports", "partition": 0, "offset": 99, "timestamp": 1609152844036, "timestampType": "CREATE_TIME", "value": "ZmZhMGIxMTgtNmQxZS00MzU3LTkzNDctNTE5YWI2MDRiMmJjLGZmZDI0ZDFjLWEzM2EtNDBiYS1hODA3LTNmZmRjMjI2YTQ3MA=="}]}}

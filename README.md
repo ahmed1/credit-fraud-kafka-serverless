@@ -26,6 +26,8 @@ This project implements real time detection and classification of fraudulent cre
 
 * This is an initial design of the architecture for Kafka Streaming Data
 
+
+
 * Note: Topic 3 Producer will run at time intervals to produce aggregate reports for each person
 
 * Note: for each lambda, need to write exact MSK trigger as IAC
@@ -60,6 +62,10 @@ The following is an example of a data object within the dataset:
    "Last Name": "Golden"   
  }
 ```
+
+The following is an example of the manipulated dataframe of user transactions with their attributes as object values. 
+
+<img src="media//Screen%20Shot%202020-12-26%20at%201.31.25%20PM.png" alt="initial_arch" style="zoom:50%;" />
 
 ## Individual Components
 
@@ -114,12 +120,54 @@ Note, we primarily focused on ensuring we can solve the issue of class imbalance
 ## Lambda functions
 ### Lambda Producer T1 : 
 This lambda is triggered by an API post endpoint that holds a transaction object. Using KafkaProducer, we encode the transaction object and send the encoded message to topic 1 `approved`. 
+```
+producer = KafkaProducer(security_protocol="SSL", bootstrap_servers = ['kafka_server1', 'kafka_server2'])
+
+response = producer.send(topic='approved', value = message_bytes)
+
+```
 
 ### Lambda Consumer T1:
-The transaction object is sent through the MSK and triggers the Lambda consumer that reads the object and decides if the the transaction should be approved or denied. There are two layers to this decision. The first being the history of the user's transaction which is in the form of an average of previus purchases. If the current transaction is greater that 25% of the average history of purchases it is denied on the spot. If it is under 25% it is then sent to the Machine Learning classification layer for another decision. The resulting decision is sent as an event to trigger Lambda Producer T2
+The transaction object is sent through the MSK and triggers the Lambda consumer that reads the object and decides if the the transaction should be approved or denied. The following code snippet demonstrates the decoding of the MSK Topic message `event` that triggers the lambda function
+
+```
+def lambda_handler(event, context):
+    messages = [event['records'][key][0]['value'] for key in event['records'].keys()]
+    messages = [message.encode('utf-8') for message in messages]
+    messages = [base64.decodebytes(message) for message in messages]
+    messages = [eval(message) for message in messages] # json objects you can write to dynamodb
+```
+There are two layers to this decision. The first being the history of the user's transaction which is in the form of an average of previus purchases. If the current transaction is greater that 25% of the average history of purchases it is denied on the spot. If it is under 25% it is then sent to the Machine Learning classification layer for another decision:
+```
+threshold = float(Decimal(curr_user['Item']['avgTransaction'])) * 1.25
+curr_transaction = float(Decimal(message['amt']))
+
+if curr_transaction > threshold:
+    message['is_fraud'] = True
+else: ... # second decision layer ML Classification
+
+```
+
+The resulting decision is sent as an event to trigger Lambda Producer T2:
+```
+response = client.invoke(
+            FunctionName = 'arn:aws:lambda:us-east-1:922059106485:function:Producer_t2_t3',
+            InvocationType = 'RequestResponse',
+            Payload = json.dumps(message)
+        )
+```
 
 ### Lambda Producer T2 and T3:
-Triggered by Lambda Consumer T2, this lambda messages either topic `approved` or `not_approved` depending on the result of the Consumer T1 decision. It then produces the message to the respective decision topic in the MSK to trigger the next lambda functions
+Triggered by Lambda Consumer T2, this lambda messages either topic `approved` or `not_approved` depending on the result of the Consumer T1 decision. It then produces the message to the respective decision topic in the MSK to trigger the next lambda functions. The Kafka Topic routing looks like the following:
+```
+if event['is_fraud']:
+    topic = "not_approved"
+    producer.send(topic, value=message_bytes)
+
+else:
+    topic = "approved"
+    producer.send(topic, value=message_bytes)
+```
 
 ### Lambda Consumer T2:
 If the topic is `approved` it triggers this lambda to send and log the approved transactions in the dynamo db table `approved-transactions` with user's uuid's as well as the time/day of purchase
@@ -129,19 +177,58 @@ If the topic is `not_approved` it triggers this lambda to send and log the denie
 
 
 ### Lambda Producer T4:
-This producer publishes a stream of uuid's every hour to the KMS Stream to the topic `generate_reports`. This is so that we can update the transaction details to trigger Lambda Consumer T4 to write the "monthly" transaction logs for the consumer view.  
+This producer publishes a stream of uuid's every hour to the KMS Stream to the topic `generate_reports`. This is so that we can update the transaction details to trigger Lambda Consumer T4 to write the "monthly" transaction logs for the consumer view. The following code demonstrates the staggering of user uuid's in order to generate the monthly reports. This is so that the kafka MSK cluster won't recieve too many messages at once.
 
+```for idx in range(0, len(uuids), 3):
+        uuids_to_send = uuids[idx:idx + 2]
+        uuids_to_send = ','.join(uuids_to_send)
+        message_bytes = uuids_to_send.encode('utf-8')
+        response = producer.send(topic='generate_reports', value = message_bytes)
+        
+        if idx % 10 == 0:
+            print(idx, response)
+```
 ### Lambda Consumer T4:
 Triggered by the KMS stream topic `generate_reports`, this lambda publishes the results of the transaction reports to the S3 bucket for the creation of the "monthly" transaction logs.
+
+
+### Additional Kafka Lambda Layer:
+We also used an additional layer to hold methods and objects to be shared accross multiple lambdas functions. This allowed us refactor a lot of the code and share it across different functions. This was done by creating an additional lambda function and then using its code uri after it is built `.aws-sam/build/KafkaProcessingLib` to then integrate it as a lambda layer. Two additional parts are required.
+
+First, it can be integrated with another lambda using the following snipped in its definition.
+```
+Layers:
+- !Ref KafkaProcessingLayer
+```
+
+Second, the lambda using this layer has to specify the pathway before importing it using this sinppet:
+
+```
+import sys
+sys.path.append("/opt")
+import app
+```
+This allows the function to look for the lambda in the `/opt` directory instead of `/opt/python` directory.
+
+
 
 ## Dynamo DB
 We utilized 3 tables: rejected-transactions, daily-logs, user-history. 
 * rejected-transactions: stores all the transactions that were denied by the classification layers 
-* daily-logs: stores all records of approved transactions
-* user-history: keeps record of the average spending rate of users
+* daily-logs: stores all records of approved transactions for each day
+* test-purchases: records all transactions made by each user based on their uuid
+* credit-card-purchases: keeps record of the average spending rate of users with `primary key` being the uuid
 
 
 ## S3 bucket
 We used s3 for multiple use cases. We used it to store logs and cloudformation templates.
 
-Specifically for the logs, we stored the monthly transaction logs that were generated by the `generate_reports` topic consumer.
+Specifically for the logs, we stored the monthly transaction logs that were generated by the `generate_reports` topic consumer. We created a folder within the s3 bucket under the day in which the monthly log was created, and within the folder held multiple csv files in the format "<uuid>.csv" for each of the users' monthly billing statement.
+
+
+## API Gateway
+
+We set up an API Gatway and wrote all the methods in our `template.yaml` file. It includes a `POST` request with all the `CORS` headers required. The request with then routed to the inital lambda function which acted as a producer to our first MSK topic: `authorize purchase`. This was primarily used to test data and run our simulation.
+
+
+

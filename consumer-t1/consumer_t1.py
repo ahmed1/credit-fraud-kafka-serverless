@@ -21,18 +21,18 @@ def lambda_handler(event, context):
     
     messages = [event['records'][key][0]['value'] for key in event['records'].keys()]
     messages = [message.encode('utf-8') for message in messages]
-    messages = [base64.decodebytes(message) for message in messages]
+    message = [base64.decodebytes(message) for message in messages][0]
     
     
     print("len of og messages", len(messages))
     message_lst = []
-    for message in messages:
-        try:
-            eval(message)['uuid']
-            message_lst.append(eval(message))
-        except:
-            print("in except")
-            pass
+    
+    
+    if 'uuid' in eval(message).keys():
+        message_lst.append(eval(message))
+    else:
+        print("No uuid found!", eval(message))
+        
 
     print("len of valid messages", len(message_lst))
 
@@ -89,8 +89,9 @@ def lambda_handler(event, context):
                                         ContentType = 'text/csv',
                                         Body = payload)
             response = response['Body'].read().decode('utf-8')
+            print('response:', response)
             
-            res = False if response < 0.5 else True # 0 or 1
+            res = False if float(response) < 0.5 else True # 0 or 1
             
             message['is_fraud'] = res
     

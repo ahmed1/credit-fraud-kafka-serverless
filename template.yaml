@@ -213,7 +213,7 @@ Resources:
         Schedule1:
           Type: Schedule
           Properties:
-            Schedule: rate(1 hour)
+            Schedule: rate(1 day)
 
   ConsumerT4Function: # generate_reports
     Type: AWS::Serverless::Function 
@@ -319,6 +319,73 @@ Resources:
         WriteCapacityUnits: !Ref 'WriteCapacityUnits'
       TableName: credit-card-purchases
 
+
+  KafkaAuthorizePurchaseAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+        Name: Kafka
+        Body:        
+          swagger: "2.0"
+          paths:
+            /authorize-purchase:
+              post:
+                produces:
+                - "application/json"
+                responses:
+                  '200':
+                    description: "200 response"
+                    schema:
+                      $ref: "#/definitions/Empty"
+                    headers:
+                      Access-Control-Allow-Origin:
+                        type: "string"
+                x-amazon-apigateway-integration:
+                  type: "aws_proxy"
+                  uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:922059106485:function:Producer_t1/invocations"
+                  responses:
+                    default:
+                      statusCode: "200"
+                      responseParameters:
+                        method.response.header.Access-Control-Allow-Origin: "'*'"
+                  passthroughBehavior: "when_no_match"
+                  httpMethod: "POST"
+                  contentHandling: "CONVERT_TO_TEXT"
+              options:
+                consumes:
+                - "application/json"
+                produces:
+                - "application/json"
+                responses:
+                  '200':
+                    description: "200 response"
+                    schema:
+                      $ref: "#/definitions/Empty"
+                    headers:
+                      Access-Control-Allow-Origin:
+                        type: "string"
+                      Access-Control-Allow-Methods:
+                        type: "string"
+                      Access-Control-Allow-Credentials:
+                        type: "string"
+                      Access-Control-Allow-Headers:
+                        type: "string"
+                x-amazon-apigateway-integration:
+                  type: "mock"
+                  responses:
+                    default:
+                      statusCode: "200"
+                      responseParameters:
+                        method.response.header.Access-Control-Allow-Credentials: "'true'"
+                        method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+                        method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                        method.response.header.Access-Control-Allow-Origin: "'*'"
+                  requestTemplates:
+                    application/json: "{\"statusCode\": 200}"
+                  passthroughBehavior: "when_no_match"
+          definitions:
+            Empty:
+              type: "object"
+              title: "Empty Schema"
 
 
 

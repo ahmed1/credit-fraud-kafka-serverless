@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     message = [eval(message) for message in messages][0] # json objects you can write to dynamodb
     
     
-    print('processed messages:', messages)
+    print('processed messages:', message)
     
     
     #put transaction in purchases database and update average in user db
@@ -33,7 +33,21 @@ def lambda_handler(event, context):
     message['date'] = message['trans_date_trans_time'].split(" ")[0]
     
     #log transaction
-    save_transaction = purchases.put_item(Item=app.to_decimal(message))
+    row = {}
+    row['uuid'] = message['uuid']
+    row['detais'] = [message['category'], Decimal(str(float(message['amt']))), message['city'], message['date']]
+    # save_transaction = purchases.put_item(Item=app.to_decimal(message)) # edit this
+    save_transaction = purchases.update_item(
+        Key = {
+            'uuid' : row['uuid']
+        },
+        UpdateExpression="SET details = list_append(details, :i)",
+        ExpressionAttributeValues={
+            ':i': [row],
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    
 
     #check if day exists in date daily_purchases
     try:
@@ -59,14 +73,20 @@ def lambda_handler(event, context):
     
     #user history of past purchases
     client = boto3.client('dynamodb')
-    try:
-        curr_user = client.get_item(TableName = 'credit-card-purchases', Key = {'uuid' : {'S' : str(message['uuid'])}  } )
-        print(curr_user['Item'])
-        curr_user = curr_user['Item']
-        message['count']  = curr_user['Item']['count'] + 1
-        message['avgTransaction'] = (curr_user['Item']['count'] * curr_user['Item']['avgTransaction']) / (message['count'])
-    except:
-        pass
+    # try:
+    curr_user = client.get_item(TableName = 'credit-card-purchases', Key = {'uuid' : {'S' : str(message['uuid'])}  } )
+    print('got here1', curr_user['Item'])
+    curr_user = curr_user['Item']
+    
+    print('got here 2', message)
+    print('count: ', curr_user['count'], 'AVG TRANS', curr_user['avgTransaction'])
+    message['avgTransaction'] = (float(curr_user['count']['N'])-1) * float(curr_user['avgTransaction']['N']) / float(curr_user['count']['N'])
+    
+    message['count']  = int(curr_user['count']['N']) + 1
+    print('got here 3', message)
+    # except:
+    #     print('went to except')
+    #     pass
     
     # curr_user = user.get_item(Key={'uuid': message['uuid']})['Item']
     
@@ -76,8 +96,20 @@ def lambda_handler(event, context):
 
     #update user table
     # client = boto3.client('dynamodb')
-    user.put_item(Key={'uuid': message['uuid'], 'avgTransaction': message['avgTransaction'], 'count': message['count']})
+    
+    row = {}
+    
+    row['uuid'] = message['uuid']
+    row['avgTransaction'] = Decimal(str(float(message['avgTransaction'])))
+    row['count'] = Decimal(str(float(message['count'])))
+    
+    
         
+    user.put_item(Item=row)
+    
+    
+    print('finished!')
+
         
 
     return {

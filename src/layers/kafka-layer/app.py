@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 def to_decimal(message):
     message['amt'] = Decimal(str(float(message['amt'])))
