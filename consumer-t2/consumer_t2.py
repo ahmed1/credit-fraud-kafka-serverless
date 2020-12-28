@@ -6,8 +6,9 @@ from decimal import Decimal
 # import requests
 
 dynamo = boto3.resource('dynamodb')
-purchases = dynamo.Table('test-purchases')
-user = dynamo.Table('credit-card-purchases')
+daily_purchases = dynamo.Table('daily_logs') #daily billing
+purchases = dynamo.Table('test-purchases') #user billing
+user = dynamo.Table('credit-card-purchases') #avgs
 
 def to_decimal(message):
     message['amt'] = Decimal(str(float(message['amt'])))
@@ -24,7 +25,7 @@ def lambda_handler(event, context):
     messages = [event['records'][key][0]['value'] for key in event['records'].keys()]
     messages = [message.encode('utf-8') for message in messages]
     messages = [base64.decodebytes(message) for message in messages]
-        messages = [eval(message) for message in messages] # json objects you can write to dynamodb
+    messages = [eval(message) for message in messages] # json objects you can write to dynamodb
     
     
     print('processed messages:', messages)
@@ -32,11 +33,37 @@ def lambda_handler(event, context):
     
     #put transaction in purchases database and update average in user db
     for message in messages:
+        message['date'] = message['trans_date_trans_time'].split(" ")[0]
         
+        #log transaction
         save_transaction = purchases.put_item(Item=to_decimal(message))
+
+        #check if day exists in date daily_purchases
+        try:
+            day = daily_purchases.get_item(Key={'date': message['date']})
+            day = day['Item']
+        except:
+            day = None
         
-        curr_user = user.get_item(Key={'uuid': message['uuid']})
+        #if day does not exist create new object with details in list
+        if day == None:
+            item = {
+                'date': message['date'],
+                'details': [str(message)]
+            }
+            daily_purchases.put_item(Item=(item))
         
+        #append details to existing object day
+        else:
+            # day['date'] = message['date']
+            day['details'].append(str(message))
+            daily_purchases.put_item(Item=(day))
+            
+        
+        #user history of past purchases
+        curr_user = user.get_item(Key={'uuid': message['uuid']})['Item']
+        
+        print("dumps", json.dumps(message['uuid']))
         #update average and count
         message['count']  = curr_user['Item']['count'] + 1
         message['avgTransaction'] = (curr_user['Item']['count'] * curr_user['Item']['avgTransaction']) / (message['count'])
