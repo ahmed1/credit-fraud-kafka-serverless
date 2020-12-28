@@ -16,12 +16,24 @@ def lambda_handler(event, context):
     messages = [event['records'][key][0]['value'] for key in event['records'].keys()]
     messages = [message.encode('utf-8') for message in messages]
     messages = [base64.decodebytes(message) for message in messages]
-    messages = [eval(message)  for message in messages]
-    print('processed messages:', messages)
     
-    #based on extracted uuid, get user's transaction history
+    
+    print("len of og messages", len(messages))
+    message_lst = []
     for message in messages:
+        try:
+            eval(message)['uuid']
+            message_lst.append(eval(message))
+        except:
+            print("in except")
+            pass
+
+    print("len of valid messages", len(message_lst))
+
+    #based on extracted uuid, get user's transaction history
+    for message in message_lst:
         #check if user is in database
+        print(message)
         try:
             curr_user = user.get_item(Key={'uuid': message['uuid']})
             curr_user['Item']
@@ -46,7 +58,7 @@ def lambda_handler(event, context):
     
     
     #for each message trigger deny/approve lambda function
-    for message in messages:
+    for message in message_lst:
         print(json.dumps(message))
         response = client.invoke(
             FunctionName = 'arn:aws:lambda:us-east-1:922059106485:function:Producer_t2_t3',
